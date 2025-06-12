@@ -23,7 +23,7 @@ type HTTPServer struct {
 const configPath = "./config/local.yaml"
 
 func MustLoad() *Config {
-	err := godotenv.Load()
+	err := godotenv.Load("../../.env")
 	if err != nil {
 		panic("error loading .env file")
 	}
