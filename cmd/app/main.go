@@ -52,12 +52,12 @@ func main() {
 	srv := &http.Server{
 		Addr:         cfg.Address,
 		Handler:      handler,
-		ReadTimeout:  cfg.HTTPServer.Timeout,
-		WriteTimeout: cfg.HTTPServer.Timeout,
-		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
+		ReadTimeout:  cfg.Timeout,
+		WriteTimeout: cfg.Timeout,
+		IdleTimeout:  cfg.IdleTimeout,
 	}
 
-	log.Info("Starting server on", slog.String("address", cfg.HTTPServer.Address))
+	log.Info("Starting server on", slog.String("address", cfg.Address))
 
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Error("Server error: ", slog.String("err", err.Error()))
