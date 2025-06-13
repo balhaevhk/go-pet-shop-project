@@ -7,9 +7,9 @@
 // 	"github.com/go-chi/render"
 // )
 
-// type ProductsHandler struct {
-// 	repo domain.ProductRepository
-// }
+//type ProductsHandler struct {
+//	repo domain.ProductRepository
+//}
 
 // func NewProductsHandler(repo domain.ProductRepository) *ProductsHandler {
 // 	return &ProductsHandler{repo: repo}
@@ -40,9 +40,9 @@ import (
 
 type Products interface {
 	GetAllProducts() ([]models.Product, error)
-	GetProductByID(id string) (models.Product, error)
+	GetProductByID(id int) (models.Product, error)
 	CreateProduct(product models.Product) error
-	DeleteProduct(id string) error
+	DeleteProduct(id int) error
 	UpdateProduct(product models.Product) error
 }
 
@@ -79,8 +79,17 @@ func GetProductByID(log *slog.Logger, products Products) http.HandlerFunc {
 		)
 
 		idStr := chi.URLParam(r, "id")
+		if idStr == "" {
+			http.Error(w, "Product ID is required", http.StatusBadRequest)
+			return
+		}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "Product ID is invalid", http.StatusBadRequest)
+			return
+		}
 
-		product, err := products.GetProductByID(idStr)
+		product, err := products.GetProductByID(id)
 		if err != nil {
 			log.Error("failed to get product", slog.Any("error", err))
 			http.Error(w, err.Error(), http.StatusNotFound)
@@ -134,10 +143,15 @@ func DeleteProduct(log *slog.Logger, products Products) http.HandlerFunc {
 
 		log.Info("Deleting product", slog.String("url", r.URL.String()))
 
-		id := chi.URLParam(r, "id")
-		if id == "" {
+		idStr := chi.URLParam(r, "id")
+		if idStr == "" {
 			log.Error("empty id")
 			http.Error(w, "invalid request", http.StatusBadRequest)
+			return
+		}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "Product ID is invalid", http.StatusBadRequest)
 			return
 		}
 

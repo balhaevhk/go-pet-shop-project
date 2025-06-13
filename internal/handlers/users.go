@@ -56,6 +56,12 @@ func GetUserByEmail(log *slog.Logger, users Users) http.HandlerFunc {
 
 		email := r.URL.Query().Get("email")
 
+		if email == "" {
+			log.Error("missing email parameter")
+			http.Error(w, "missing email parameter", http.StatusBadRequest)
+			return
+		}
+
 		log.Info("Received email param", slog.String("email", email))
 
 		user, err := users.GetUserByEmail(email)

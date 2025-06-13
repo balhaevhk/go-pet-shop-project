@@ -23,10 +23,14 @@ func (s *Storage) GetAllProducts() ([]models.Product, error) {
 		}
 		products = append(products, p)
 	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("%s: %w", fn, err)
+	}
+
 	return products, nil
 }
 
-func (s *Storage) GetProductByID(id string) (models.Product, error) {
+func (s *Storage) GetProductByID(id int) (models.Product, error) {
 	const fn = "storage.postgres.product.GetProductByID"
 
 	var product models.Product
@@ -53,7 +57,7 @@ func (s *Storage) CreateProduct(p models.Product) error {
 	return nil
 }
 
-func (s *Storage) DeleteProduct(id string) error {
+func (s *Storage) DeleteProduct(id int) error {
 	const fn = "storage.postgres.product.DeleteProduct"
 
 	_, err := s.db.Exec(context.Background(),

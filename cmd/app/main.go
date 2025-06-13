@@ -56,10 +56,17 @@ func main() {
 	})
 	router.Route("/users", func(r chi.Router) {
 		r.Get("/", handlers.GetAllUsers(log, storage))
-		r.Get("/", handlers.GetUserByEmail(log, storage))
+		r.Get("/email", handlers.GetUserByEmail(log, storage))
+		r.Get("/orders", handlers.GetOrdersByUserEmail(log, storage))
 		r.Post("/", handlers.CreateUser(log, storage))
 	})
+	router.Route("/orders", func(r chi.Router) {
+		r.Get("/{id}", handlers.GetOrderByID(log, storage))
+		r.Get("/{orderID}/items", handlers.GetOrderItemsByOrderID(log, storage))
+		r.Post("/", handlers.CreateOrder(log, storage))
+		r.Post("/{id}/items", handlers.AddOrderItem(log, storage))
 
+	})
 	// Оборачиваем роутер в middleware
 	handler := logger.LoggingMiddleware(log, router)
 
