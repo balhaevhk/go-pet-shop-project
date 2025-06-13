@@ -26,6 +26,21 @@ func (s *Storage) GetAllProducts() ([]models.Product, error) {
 	return products, nil
 }
 
+func (s *Storage) GetProductByID(id string) (models.Product, error) {
+	const fn = "storage.postgres.product.GetProductByID"
+
+	var product models.Product
+
+	err := s.db.QueryRow(context.Background(),
+		`SELECT id, name, price, stock FROM products WHERE id = $1`,
+		id).Scan(&product.ID, &product.Name, &product.Price, &product.Stock)
+	if err != nil {
+		return models.Product{}, fmt.Errorf("%s: %w", fn, err)
+	}
+
+	return product, nil
+}
+
 func (s *Storage) CreateProduct(p models.Product) error {
 	const fn = "storage.postgres.product.CreateProduct"
 
@@ -35,7 +50,6 @@ func (s *Storage) CreateProduct(p models.Product) error {
 	if err != nil {
 		return fmt.Errorf("%s: %w", fn, err)
 	}
-
 	return nil
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"go-pet-shop/internal/config"
 	"go-pet-shop/internal/handlers"
 	"go-pet-shop/internal/lib/logger"
@@ -40,10 +41,24 @@ func main() {
 
 	// Handlers
 	router.Get("/health", handlers.StatusHandler)
-	router.Get("/products", handlers.GetAllProducts(log, storage))
-	router.Post("/products", handlers.CreateProduct(log, storage))
-	router.Delete("/products/{id}", handlers.DeleteProduct(log, storage))
-	router.Put("/products/{id}", handlers.UpdateProduct(log, storage))
+	//router.Get("/products", handlers.GetAllProducts(log, storage))
+	//router.Get("/products/{id}", handlers.GetProductByID(log, storage))
+	//router.Post("/products", handlers.CreateProduct(log, storage))
+	//router.Delete("/products/{id}", handlers.DeleteProduct(log, storage))
+	//router.Put("/products/{id}", handlers.UpdateProduct(log, storage))
+
+	router.Route("/products", func(r chi.Router) {
+		r.Get("/", handlers.GetAllProducts(log, storage))
+		r.Get("/{id}", handlers.GetProductByID(log, storage))
+		r.Post("/", handlers.CreateProduct(log, storage))
+		r.Put("/{id}", handlers.UpdateProduct(log, storage))
+		r.Delete("/{id}", handlers.DeleteProduct(log, storage))
+	})
+	router.Route("/users", func(r chi.Router) {
+		r.Get("/", handlers.GetAllUsers(log, storage))
+		r.Get("/", handlers.GetUserByEmail(log, storage))
+		r.Post("/", handlers.CreateUser(log, storage))
+	})
 
 	// Оборачиваем роутер в middleware
 	handler := logger.LoggingMiddleware(log, router)
@@ -59,7 +74,7 @@ func main() {
 
 	log.Info("Starting server on", slog.String("address", cfg.Address))
 
-	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error("Server error: ", slog.String("err", err.Error()))
 	}
 }

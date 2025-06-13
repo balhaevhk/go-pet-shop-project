@@ -6,19 +6,19 @@ type Product struct {
 	ID    int
 	Name  string
 	Price float64
-	Stock int // количество на складе
+	Stock int // Количество на складе
 }
 
-type Customer struct {
+type User struct {
 	ID    int
 	Name  string
 	Email string
 }
 
 type Order struct {
-	ID         int
-	CustomerID int
-	CreatedAt  time.Time
+	ID        int
+	UserID    int
+	CreatedAt time.Time
 }
 
 type OrderItem struct {
