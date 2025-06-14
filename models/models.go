@@ -23,8 +23,16 @@ type Order struct {
 }
 
 type OrderItem struct {
+	ID        int `json:"id"`
+	OrderID   int `json:"order_id"`
+	ProductID int `json:"product_id"`
+	Quantity  int `json:"quantity"`
+}
+
+type Transaction struct {
 	ID        int
-	OrderID   int
-	ProductID int
-	Quantity  int
+	orderID   int
+	Amount    float64
+	Status    string
+	CreatedAt time.Time
 }

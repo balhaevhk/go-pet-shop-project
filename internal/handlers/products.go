@@ -56,7 +56,6 @@ func GetAllProducts(log *slog.Logger, products Products) http.HandlerFunc {
 		)
 
 		products, err := products.GetAllProducts()
-
 		if err != nil {
 			log.Error("failed to get products", slog.Any("error", err))
 			http.Error(w, err.Error(), http.StatusInternalServerError)
