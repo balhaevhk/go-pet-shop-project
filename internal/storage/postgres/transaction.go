@@ -32,7 +32,7 @@ func (s *Storage) PlaceOrder(userEmail string, items []models.OrderItem) (orderI
 			WHERE id = $2 AND stock >= $1
 			`, item.Quantity, item.ProductID)
 		if execErr != nil {
-			return 0, fmt.Errorf("%s: update stock failde: %w", fn, execErr)
+			return 0, fmt.Errorf("%s: update stock failed: %w", fn, execErr)
 		}
 		if res.RowsAffected() == 0 {
 			return 0, fmt.Errorf("%s: insufficient stock for product ID %d", fn, item.ProductID)

@@ -53,12 +53,15 @@ func main() {
 		r.Post("/", handlers.CreateProduct(log, storage))
 		r.Put("/{id}", handlers.UpdateProduct(log, storage))
 		r.Delete("/{id}", handlers.DeleteProduct(log, storage))
+		r.Get("/popular", handlers.GetPopularProducts(log, storage))
 	})
 	router.Route("/users", func(r chi.Router) {
 		r.Get("/", handlers.GetAllUsers(log, storage))
 		r.Get("/email", handlers.GetUserByEmail(log, storage))
 		r.Get("/orders", handlers.GetOrdersByUserEmail(log, storage))
 		r.Post("/", handlers.CreateUser(log, storage))
+		r.Get("/history", handlers.GetUserOrderHistory(log, storage))
+
 	})
 	router.Route("/orders", func(r chi.Router) {
 		r.Get("/{id}", handlers.GetOrderByID(log, storage))

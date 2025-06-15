@@ -79,11 +79,13 @@ func GetProductByID(log *slog.Logger, products Products) http.HandlerFunc {
 
 		idStr := chi.URLParam(r, "id")
 		if idStr == "" {
+			log.Error("failed to get product by id")
 			http.Error(w, "Product ID is required", http.StatusBadRequest)
 			return
 		}
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
+			log.Error("failed to parse id parameter", slog.Any("error", err))
 			http.Error(w, "Product ID is invalid", http.StatusBadRequest)
 			return
 		}

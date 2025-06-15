@@ -27,7 +27,7 @@ func (s *Storage) GetAllUsers() ([]models.User, error) {
 }
 
 func (s *Storage) GetUserByEmail(email string) (models.User, error) {
-	const fn = `storage.postgres.user.GetUserByEmail`
+	const fn = "storage.postgres.user.GetUserByEmail"
 
 	var user models.User
 
@@ -42,7 +42,7 @@ func (s *Storage) GetUserByEmail(email string) (models.User, error) {
 }
 
 func (s *Storage) CreateUser(user models.User) error {
-	const fn = `storage.postgres.user.CreateUser`
+	const fn = "storage.postgres.user.CreateUser"
 
 	_, err := s.db.Exec(context.Background(),
 		`INSERT INTO users (name, email) VALUES ($1, $2)`,
