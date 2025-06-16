@@ -31,7 +31,7 @@ type OrderItem struct {
 
 type Transaction struct {
 	ID        int
-	orderID   int
+	OrderID   int
 	Amount    float64
 	Status    string
 	CreatedAt time.Time

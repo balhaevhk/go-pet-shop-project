@@ -70,7 +70,7 @@ func (s *Storage) PlaceOrder(userEmail string, items []models.OrderItem) (orderI
 		VALUES ($1, $2, $3)
 		`, orderID, item.ProductID, item.Quantity)
 		if execErr != nil {
-			return 0, fmt.Errorf("%s: insert order item failde: %w", fn, execErr)
+			return 0, fmt.Errorf("%s: insert order item failed: %w", fn, execErr)
 		}
 		total += float64(item.Quantity) * price
 	}
@@ -88,7 +88,7 @@ func (s *Storage) PlaceOrder(userEmail string, items []models.OrderItem) (orderI
 		VALUES ($1, $2, 'paid', NOW())
 		`, orderID, total)
 	if err != nil {
-		return 0, fmt.Errorf("%s: insert transction failde: %w", fn, err)
+		return 0, fmt.Errorf("%s: insert transction failed: %w", fn, err)
 	}
 	return orderID, nil
 }

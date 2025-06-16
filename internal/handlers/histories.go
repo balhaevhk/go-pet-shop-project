@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/render"
 	"go-pet-shop/models"
 	"log/slog"
 	"net/http"
+
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/render"
 )
 
 type Histories interface {
